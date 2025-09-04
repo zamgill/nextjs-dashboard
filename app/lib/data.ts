@@ -2,6 +2,7 @@ import postgres from 'postgres';
 import {
   CustomerField,
   CustomersTableType,
+  Invoice,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
@@ -10,6 +11,13 @@ import {
 import { formatCurrency } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+
+export async function insertInvoice({ customer_id, amount, status, date }: Omit<Invoice, 'id'>) {
+  await sql`
+  INSERT INTO invoices (customer_id, amount, status, date)
+  VALUES (${customer_id}, ${amount}, ${status}, ${date})
+  `;
+}
 
 export async function fetchRevenue() {
   try {
