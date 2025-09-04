@@ -19,6 +19,14 @@ export async function insertInvoice({ customer_id, amount, status, date }: Omit<
   `;
 }
 
+export async function updateInvoice({ id, customer_id, amount, status }: Omit<Invoice, 'date'>) {
+  await sql`
+    UPDATE invoices
+    SET customer_id = ${customer_id}, amount = ${amount}, status = ${status}
+    WHERE id = ${id}
+  `;
+}
+
 export async function fetchRevenue() {
   try {
     // Artificially delay a response for demo purposes.
