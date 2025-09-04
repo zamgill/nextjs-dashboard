@@ -27,6 +27,10 @@ export async function updateInvoice({ id, customer_id, amount, status }: Omit<In
   `;
 }
 
+export async function deleteInvoice(id: Invoice['id']) {
+  await sql`DELETE FROM invoices WHERE id = ${id}`;
+}
+
 export async function fetchRevenue() {
   try {
     // Artificially delay a response for demo purposes.

@@ -4,7 +4,6 @@ import * as db from '@/app/lib/data';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import z from 'zod';
-import { insertInvoice } from './data';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -26,7 +25,7 @@ export async function createInvoice(formData: FormData) {
   const amountInCents = amount * 100;
   const date = new Date().toISOString().split('T')[0];
 
-  await insertInvoice({ customer_id: customerId, amount: amountInCents, status, date });
+  await db.insertInvoice({ customer_id: customerId, amount: amountInCents, status, date });
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
 }
@@ -46,4 +45,9 @@ export async function updateInvoice(id: string, formData: FormData) {
   });
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
+}
+
+export async function deleteInvoice(id: string) {
+  await db.deleteInvoice(id);
+  revalidatePath('/dashboard/invoices');
 }
